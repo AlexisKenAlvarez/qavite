@@ -29,7 +29,7 @@ const Signin = () => {
 
   return (
     <>
-      <View style={[styles.container, { alignItems: "center" }]}>
+      <View style={[styles.containerCenter, { alignItems: "center" }]}>
         <Text style={[textStyles.headerSans, textStyles.xl4]}>LOGO</Text>
         <View
           style={{ marginTop: 40, width: "100%", display: "flex", gap: 20 }}

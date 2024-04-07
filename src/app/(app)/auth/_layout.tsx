@@ -10,8 +10,13 @@ export default function Layout() {
   const pathname = usePathname();
 
   useEffect(() => {
+
+    console.log(pathname);
     const checkSession = (session: Session) => {
       if (session && pathname !== "/auth/forgot") {
+
+        console.log(pathname);
+        console.log("redirecting");
         if (Platform.OS === "ios") {
           setTimeout(() => {
             router.replace("/(app)/(authenticated)/");

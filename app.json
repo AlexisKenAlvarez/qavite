@@ -2,10 +2,30 @@
   "expo": {
     "name": "uni-stack-with-nativewind",
     "slug": "uni-stack-with-nativewind",
-    "scheme": "com.uni.nativewind",
+    "scheme": "com.qavite.supabase",
     "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "version": "0.0.1",
+    "android": {
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "com.qavite.supabase",
+              "host": "*.myapp.io",
+              "pathPrefix": "/auth/forgot"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "package": "com.qavite.supabase"
+    },
     "web": {
       "output": "server",
       "bundler": "metro"
@@ -24,6 +44,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dcf0dc7c-e433-4b19-b10b-5080e307ec6d"
+      }
     }
   }
 }

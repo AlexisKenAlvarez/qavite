@@ -96,7 +96,13 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     height: "100%",
-    padding: 20,
+    padding: 24,
+  },
+
+  containerCenter: {
+    backgroundColor: "white",
+    height: "100%",
+    padding: 24,
     display: "flex",
     justifyContent: "center",
   },
