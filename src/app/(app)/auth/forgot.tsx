@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validateEmailDomain } from "@/lib/helpers";
-import { InputStyles } from "@/lib/styles";
+import { InputStyles, red, styles, textStyles } from "@/lib/styles";
 import { supabase } from "@/trpc/supabase";
 import * as Linking from "expo-linking";
 
@@ -29,25 +29,27 @@ export const SendEmail = () => {
       return;
     }
     console.log(resetPasswordURL);
-    // const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
-    //   redirectTo: resetPasswordURL,
-    // });
+    const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+      redirectTo: resetPasswordURL,
+    });
 
-    // if (error) {
-    //   console.log(error);
-    //   return;
-    // }
+    if (error) {
+      console.log(error);
+      return;
+    }
   }
 
   return (
-    <View className="bg-white h-full p-5 flex  justify-center">
-      <Text className="text-center text-3xl font-sans text-primary">
+    <View style={styles.container}>
+      <Text
+        style={[textStyles.headerSans, textStyles.xl3, { textAlign: "center" }]}
+      >
         Forgot password
       </Text>
-      <Text className="ml-4 text-center">
+      <Text style={{ marginLeft: 4, textAlign: "center", marginBottom: 8 }}>
         Please enter your email to reset your password.
       </Text>
-      <View className="relative shadow-md w-full mt-7">
+      <View style={{ width: "100%", marginTop: 7 }}>
         <Controller
           control={form.control}
           render={({
@@ -60,12 +62,15 @@ export const SendEmail = () => {
                 onBlur={onBlur}
                 onChangeText={(text) => onChange(text)}
                 value={value}
-                style={errors.email ? InputStyles.isError : InputStyles.isValid}
-                className=" w-full border py-3 rounded-full px-7  text-lg"
+                style={
+                  errors.email
+                    ? [InputStyles.isError, InputStyles.default]
+                    : [InputStyles.isValid, InputStyles.default]
+                }
               />
 
               {errors.email && (
-                <Text className="ml-5 mt-1 text-red-500">
+                <Text style={InputStyles.errorMessage}>
                   {errors.email.message}
                 </Text>
               )}
@@ -76,13 +81,8 @@ export const SendEmail = () => {
         />
       </View>
 
-      <Pressable
-        className="w-full rounded-full py-3 bg-primary mt-6"
-        onPress={form.handleSubmit(onSubmit)}
-      >
-        <Text className="text-white text-center font-bold text-lg">
-          Continue
-        </Text>
+      <Pressable style={styles.button} onPress={form.handleSubmit(onSubmit)}>
+        <Text style={styles.buttonText}>Continue</Text>
       </Pressable>
     </View>
   );

@@ -1,3 +1,4 @@
+import { primaryColor, styles, textStyles } from "@/lib/styles";
 import { supabase } from "@/trpc/supabase";
 import { AntDesign } from "@expo/vector-icons";
 import { Session } from "@supabase/supabase-js";
@@ -41,8 +42,8 @@ export default function Layout() {
       tabBar={() => {
         if (pathname !== "/auth/forgot") {
           return (
-            <View className="bg-white p-5 flex flex-row items-center justify-center gap-2">
-              <Text className="text-xl">
+            <View style={styles.authLayoutTab}>
+              <Text style={textStyles.lg}>
                 {pathname === "/auth/signin"
                   ? "Don't have an account?"
                   : "Already have an account?"}
@@ -56,7 +57,13 @@ export default function Layout() {
                   }
                 }}
               >
-                <Text className="text-xl font-bold text-primary">
+                <Text
+                  style={[
+                    textStyles.headerSans,
+                    textStyles.lg,
+                    { marginLeft: 4, color: primaryColor },
+                  ]}
+                >
                   {pathname === "/auth/signin" ? "Sign up" : "Sign in"}
                 </Text>
               </Pressable>
@@ -79,10 +86,7 @@ export default function Layout() {
             paddingLeft: 12,
           },
           headerLeft: () => (
-            <Pressable
-              className="rounded-full bg-primary w-11 h-11 flex items-center justify-center"
-              onPress={() => router.back()}
-            >
+            <Pressable style={styles.roundButton} onPress={() => router.back()}>
               <AntDesign name="arrowleft" size={17} color="white" />
             </Pressable>
           ),
@@ -98,10 +102,7 @@ export default function Layout() {
             paddingLeft: 12,
           },
           headerLeft: () => (
-            <Pressable
-              className="rounded-full bg-primary w-11 h-11 flex items-center justify-center"
-              onPress={() => router.back()}
-            >
+            <Pressable style={styles.roundButton} onPress={() => router.back()}>
               <AntDesign name="arrowleft" size={17} color="white" />
             </Pressable>
           ),
@@ -112,11 +113,3 @@ export default function Layout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  signupHeader: {
-    fontFamily: "DMSerifDisplay-Regular",
-    color: "#008400",
-    fontSize: 24,
-  },
-});

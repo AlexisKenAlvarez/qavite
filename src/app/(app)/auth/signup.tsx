@@ -1,5 +1,5 @@
 import { validateEmailDomain } from "@/lib/helpers";
-import { InputStyles } from "@/lib/styles";
+import { InputStyles, primaryColor, styles, textStyles } from "@/lib/styles";
 import { supabase } from "@/trpc/supabase";
 import { api } from "@/utils/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,21 +10,48 @@ import {
   ScrollView,
   Text,
   TextInput,
-  View
+  View,
+  FlatList,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { z } from "zod";
 
 const Signup = () => {
+  const formArr = [
+    {
+      label: "firstname",
+      placeholder: "Juan",
+      isPassword: false,
+    },
+
+    {
+      label: "lastname",
+      placeholder: "Dela Cruz",
+      isPassword: false,
+    },
+    {
+      label: "email",
+      placeholder: "juandelacruz@cvsu.edu.ph",
+      isPassword: false,
+    },
+    {
+      label: "password",
+      placeholder: "Password",
+      isPassword: true,
+    },
+    {
+      label: "confirmPassword",
+      placeholder: "Confirm Password",
+      isPassword: true,
+    },
+  ];
   const [agreed, setAgreed] = useState(false);
   const createUserMutation = api.auth.createUser.useMutation();
 
-
-
   const formSchema = z
     .object({
-      firstname: z.string().min(1),
-      lastname: z.string().min(1),
+      firstname: z.string().min(1, { message: "Required!" }),
+      lastname: z.string().min(1, { message: "Required!" }),
       email: z.string().email(),
       password: z.string().min(6).max(20),
       confirmPassword: z.string().min(6).max(20),
@@ -68,167 +95,71 @@ const Signup = () => {
       return;
     }
 
-    console.log("User created!");
+    console.log(values);
   }
 
   return (
     <>
-      <ScrollView className="bg-white h-full p-5">
-        <Text className="font-sans text-4xl text-primary text-center mt-5">
+      <ScrollView
+        style={{ backgroundColor: "white", padding: 20, flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 48 }}
+      >
+        <Text
+          style={[
+            textStyles.headerSans,
+            textStyles.xl4,
+            { color: primaryColor, marginTop: 20, textAlign: "center" },
+          ]}
+        >
           LOGO
         </Text>
-        <View className="mt-10 w-full flex gap-4">
-          <View className="relative shadow-md">
-            <Controller
-              control={form.control}
-              render={({
-                formState: { errors },
-                field: { onChange, onBlur, value },
-              }) => (
-                <>
-                  <TextInput
-                    placeholder="Juan"
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
-                    value={value}
-                    style={errors.firstname ? InputStyles.isError : InputStyles.isValid}
-                    className=" w-full border py-3 rounded-full px-7  text-lg"
-                  />
+        <View
+          style={{ marginTop: 40, width: "100%", display: "flex", gap: 20 }}
+        >
+          {formArr.map((item) => (
+            <View style={{ position: "relative" }} key={item.label}>
+              <Controller
+                control={form.control}
+                render={({
+                  formState: { errors },
+                  field: { onChange, onBlur, value },
+                }) => (
+                  <>
+                    <TextInput
+                      placeholder={item.placeholder}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(text)}
+                      value={value}
+                      secureTextEntry={item.isPassword}
+                      style={
+                        errors[`${item.label}`]
+                          ? [InputStyles.isError, InputStyles.default]
+                          : [InputStyles.isValid, InputStyles.default]
+                      }
+                    />
 
-                  {errors.firstname && (
-                    <Text className="ml-5 mt-1 text-red-500">
-                      {errors.firstname.message}
-                    </Text>
-                  )}
-                </>
-              )}
-              name="firstname"
-              rules={{ required: true }}
-            />
-          </View>
-
-          <View className="relative shadow-md">
-            <Controller
-              control={form.control}
-              render={({
-                formState: { errors },
-                field: { onChange, onBlur, value },
-              }) => (
-                <>
-                  <TextInput
-                    placeholder="Dela Cruz"
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
-                    value={value}
-                    style={errors.lastname ? InputStyles.isError : InputStyles.isValid}
-                    className=" w-full border py-3 rounded-full px-7  text-lg"
-                  />
-
-                  {errors.lastname && (
-                    <Text className="ml-5 mt-1 text-red-500">
-                      {errors.lastname.message}
-                    </Text>
-                  )}
-                </>
-              )}
-              name="lastname"
-              rules={{ required: true }}
-            />
-          </View>
-
-          <View className="relative shadow-md">
-            <Controller
-              control={form.control}
-              render={({
-                formState: { errors },
-                field: { onChange, onBlur, value },
-              }) => (
-                <>
-                  <TextInput
-                    placeholder="juandelacruz@cvsu.edu.ph"
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
-                    value={value}
-                    style={errors.email ? InputStyles.isError : InputStyles.isValid}
-                    className=" w-full border py-3 rounded-full px-7  text-lg"
-                  />
-
-                  {errors.email && (
-                    <Text className="ml-5 mt-1 text-red-500">
-                      {errors.email.message}
-                    </Text>
-                  )}
-                </>
-              )}
-              name="email"
-              rules={{ required: true }}
-            />
-          </View>
-
-          <View className="relative shadow-md">
-            <Controller
-              control={form.control}
-              render={({
-                formState: { errors },
-                field: { onChange, onBlur, value },
-              }) => (
-                <>
-                  <TextInput
-                    placeholder="Password"
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
-                    value={value}
-                    secureTextEntry
-                    style={errors.password ? InputStyles.isError : InputStyles.isValid}
-                    className=" w-full border py-3 rounded-full px-7  text-lg"
-                  />
-
-                  {errors.password && (
-                    <Text className="ml-5 mt-1 text-red-500">
-                      {errors.password.message}
-                    </Text>
-                  )}
-                </>
-              )}
-              name="password"
-              rules={{ required: true }}
-            />
-          </View>
-
-          <View className="relative shadow-md">
-            <Controller
-              control={form.control}
-              render={({
-                formState: { errors },
-                field: { onChange, onBlur, value },
-              }) => (
-                <>
-                  <TextInput
-                    placeholder="Confirm Password"
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
-                    value={value}
-                    secureTextEntry
-                    style={
-                      errors.confirmPassword ? InputStyles.isError : InputStyles.isValid
-                    }
-                    className=" w-full border py-3 rounded-full px-7  text-lg"
-                  />
-
-                  {errors.confirmPassword && (
-                    <Text className="ml-5 mt-1 text-red-500">
-                      {errors.confirmPassword.message}
-                    </Text>
-                  )}
-                </>
-              )}
-              name="confirmPassword"
-              rules={{ required: true }}
-            />
-          </View>
+                    {errors[`${item.label}`] && (
+                      <Text style={InputStyles.errorMessage}>
+                        {errors[`${item.label}`].message}
+                      </Text>
+                    )}
+                  </>
+                )}
+                name={
+                  item.label as
+                    | "firstname"
+                    | "lastname"
+                    | "email"
+                    | "password"
+                    | "confirmPassword"
+                }
+                rules={{ required: true }}
+              />
+            </View>
+          ))}
         </View>
 
-        <View className="flex flex-row items-center justify-center mt-5">
+        <View style={[styles.center, { marginTop: 20, flexDirection: "row" }]}>
           <BouncyCheckbox
             size={20}
             fillColor="#008400"
@@ -244,20 +175,20 @@ const Signup = () => {
             }}
           />
 
-          <Text className=" text-lg -ml-1">
+          <Text style={[textStyles.lg, { marginLeft: -4 }]}>
             I agree to the{" "}
-            <Text className="text-primary font-bold">Terms of Service</Text>
+            <Text style={{ fontWeight: "bold", color: primaryColor }}>
+              Terms of Service
+            </Text>
           </Text>
         </View>
 
         <Pressable
           disabled={!agreed}
-          className="w-full rounded-full py-3 bg-primary mt-14"
+          style={styles.button}
           onPress={form.handleSubmit(onSubmit)}
         >
-          <Text className="text-white text-center font-bold text-lg">
-            Continue
-          </Text>
+          <Text style={styles.buttonText}>Continue</Text>
         </Pressable>
       </ScrollView>
     </>
@@ -265,5 +196,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
