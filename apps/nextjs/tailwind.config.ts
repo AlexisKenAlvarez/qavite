@@ -14,6 +14,10 @@ export default {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
+      colors: {
+        green1: "#006400",
+        primary: "#008400",
+      },
     },
   },
 } satisfies Config;
