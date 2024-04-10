@@ -14,6 +14,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules",
+    "generate": "supabase gen types typescript --linked > lib/types.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"

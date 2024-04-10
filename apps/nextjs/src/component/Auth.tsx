@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -9,17 +9,27 @@ import { Button } from "@qavite/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormMessage
 } from "@qavite/ui/form";
 import { Input } from "@qavite/ui/input";
 
 import Container from "./Container";
+import { api } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+import { validateEmailDomain } from "@/lib/helpers";
 
-const Hero = () => {
+const Auth = () => {
+  const router = useRouter()
+  const signinMutation = api.auth.adminSignin.useMutation({
+    onError: (error) => {
+      form.setError("email", {
+        message: error.message
+      })
+    }
+  })
+
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
@@ -35,8 +45,23 @@ const Hero = () => {
     },
   });
 
-  function onSubmit(data: formType) {
-    console.log(onSubmit);
+  async function onSubmit(data: formType) {
+
+    if (!validateEmailDomain(data.email)) {
+      form.setError("email", {
+        message: "Invalid email domain"
+      })
+      return
+    }
+
+    try {
+      await signinMutation.mutateAsync(data);
+
+      // Redirect to home page
+      router.replace("/")
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -53,7 +78,7 @@ const Hero = () => {
       </div>
       <div className="relative z-10 flex w-full max-w-sm flex-col items-center rounded-xl bg-white pt-5 pb-10 px-10 ">
         <Image alt="Logo" width={100} height={100} src="/logo.webp" />
-        <h1 className="uppercase font-bold text-primary text-2xl mb-2">Qavite Admin</h1>
+        <h1 className="uppercase font-bold text-primary text-2xl mb-2 font-primary">Qavite Admin</h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -77,7 +102,7 @@ const Hero = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Password" className="rounded-full py-5 px-5 border-primary" {...field} />
+                    <Input placeholder="Password" type="password" className="rounded-full py-5 px-5 border-primary" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,4 +116,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Auth;
