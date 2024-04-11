@@ -1,4 +1,4 @@
-const Dashboard = () => {
+const Hero = () => {
   return (
     <div>
       Enter
@@ -6,4 +6,4 @@ const Dashboard = () => {
   );
 }
 
-export default Dashboard;
+export default Hero;

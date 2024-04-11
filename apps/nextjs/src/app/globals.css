@@ -48,3 +48,9 @@
     --ring: 240 4.9% 83.9%;
   }
 }
+
+@layer base {
+  .green-to-white {
+    filter: hue-rotate(120deg); /* 120deg rotates the green hue to align with the red hue, essentially converting it to white */
+  }
+}

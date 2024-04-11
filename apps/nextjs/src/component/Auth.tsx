@@ -108,7 +108,7 @@ const Auth = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full text-white rounded-full font-bold">SignIn</Button>
+            <Button type="submit" disabled={signinMutation.isPending} className="w-full text-white rounded-full font-bold">SignIn</Button>
           </form>
         </Form>
       </div>
