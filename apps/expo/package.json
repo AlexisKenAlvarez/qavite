@@ -31,6 +31,7 @@
     "aes-js": "^3.1.2",
     "buffer": "^6.0.3",
     "expo": "^50.0.14",
+    "expo-blur": "~12.9.2",
     "expo-constants": "~15.4.2",
     "expo-linking": "~6.2.1",
     "expo-router": "^3.4.8",

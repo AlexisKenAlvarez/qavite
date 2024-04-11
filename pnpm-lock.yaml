@@ -74,6 +74,9 @@ importers:
       expo:
         specifier: ^50.0.14
         version: 50.0.14(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+      expo-blur:
+        specifier: ~12.9.2
+        version: 12.9.2(expo@50.0.14)
       expo-constants:
         specifier: ~15.4.2
         version: 15.4.5(expo@50.0.14)
@@ -6276,6 +6279,14 @@ packages:
     transitivePeerDependencies:
       - expo
       - supports-color
+    dev: false
+
+  /expo-blur@12.9.2(expo@50.0.14):
+    resolution: {integrity: sha512-q+EIOkXw7OCE3VBTLRANsUIdMxtFWDTFpaMulJEXMwtxNQaCcAvzHZvwWP9dlI96FM4A6UdX2/slBNfNJzJcCQ==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.14(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
     dev: false
 
   /expo-constants@15.4.5(expo@50.0.14):
