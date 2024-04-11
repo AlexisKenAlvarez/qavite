@@ -2,6 +2,8 @@ import type { Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
+import { DM_Serif_Display } from "next/font/google"
+
 import { cn } from "@qavite/ui";
 import { ThemeProvider, ThemeToggle } from "@qavite/ui/theme";
 import { Toaster } from "@qavite/ui/toast";
@@ -38,7 +40,18 @@ export const viewport: Viewport = {
   ],
 };
 
+const DMSerif = DM_Serif_Display({
+  weight: ["400"],
+  style: "normal",
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-dm-serif-display",
+
+})
+
 export default function RootLayout(props: { children: React.ReactNode }) {
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -46,6 +59,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           "min-h-screen bg-background font-sans text-foreground antialiased",
           GeistSans.variable,
           GeistMono.variable,
+          DMSerif.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

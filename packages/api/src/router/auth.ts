@@ -17,7 +17,6 @@ export const authRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-
       console.log("Pumasok na dito");
 
       const { data, error } = await ctx.supabase.auth.signUp({
@@ -30,7 +29,7 @@ export const authRouter = createTRPCRouter({
           },
         },
       });
-      console.log("🚀 ~ .mutation ~ data:", data)
+      console.log("🚀 ~ .mutation ~ data:", data);
 
       if (error) {
         throw new TRPCError({
@@ -40,5 +39,36 @@ export const authRouter = createTRPCRouter({
       }
 
       return data;
+    }),
+  adminSignin: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { data, error } = await ctx.supabase.from("admins").select().eq("email", input.email).single();
+
+      if (!data || error) {
+        throw new TRPCError({
+          message: "Invalid credentials.",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      const { error: signInError } = await ctx.supabase.auth.signInWithPassword({
+        email: input.email,
+        password: input.password,
+      });
+
+      if (signInError) {
+        throw new TRPCError({
+          message: "Invalid credentials.",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      return data
     }),
 });

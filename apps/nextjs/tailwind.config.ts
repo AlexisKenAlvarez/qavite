@@ -13,6 +13,11 @@ export default {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
+        primary: ['--font-dm-serif-display']
+      },
+      colors: {
+        green1: "#006400",
+        primary: "#008400",
       },
     },
   },
