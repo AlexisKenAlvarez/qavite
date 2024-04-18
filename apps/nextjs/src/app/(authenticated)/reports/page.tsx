@@ -1,4 +1,4 @@
-const Hero = () => {
+const page = () => {
   return (
     <div>
       Enter
@@ -6,4 +6,4 @@ const Hero = () => {
   );
 }
 
-export default Hero;
+export default page;

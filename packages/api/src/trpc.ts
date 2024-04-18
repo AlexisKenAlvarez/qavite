@@ -10,6 +10,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+
 import type { Database } from "../lib/types";
 
 /**
@@ -44,7 +45,6 @@ export const createTRPCContext = async (opts: {
     supabase,
   };
 };
-
 
 /**
  * 2. INITIALIZATION
@@ -99,19 +99,13 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-
-/** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.user?.id) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {
-      // infers the `user` as non-nullable
       user: ctx.user,
     },
   });
 });
-
-export const privateProcedure = t.procedure.use(enforceUserIsAuthed);
-

@@ -17,21 +17,15 @@ export const authRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("Pumasok na dito");
+      const { data, error: createUserError } = await ctx.supabase
+        .from("users")
+        .insert({
+          email: input.email,
+          first_name: input.firstname,
+          last_name: input.lastname,
+        });
 
-      const { data, error } = await ctx.supabase.auth.signUp({
-        email: input.email,
-        password: input.password,
-        options: {
-          data: {
-            firstname: input.firstname,
-            lastname: input.lastname,
-          },
-        },
-      });
-      console.log("🚀 ~ .mutation ~ data:", data);
-
-      if (error) {
+      if (createUserError) {
         throw new TRPCError({
           message: "Failed to create your account.",
           code: "BAD_REQUEST",
@@ -48,19 +42,26 @@ export const authRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { data, error } = await ctx.supabase.from("admins").select().eq("email", input.email).single();
+      const { data } = await ctx.supabase
+        .from("users")
+        .select()
+        .eq("email", input.email)
+        .eq("type", "admin")
+        .single();
 
-      if (!data || error) {
+      if (!data) {
         throw new TRPCError({
           message: "Invalid credentials.",
           code: "BAD_REQUEST",
         });
       }
 
-      const { error: signInError } = await ctx.supabase.auth.signInWithPassword({
-        email: input.email,
-        password: input.password,
-      });
+      const { error: signInError } = await ctx.supabase.auth.signInWithPassword(
+        {
+          email: input.email,
+          password: input.password,
+        },
+      );
 
       if (signInError) {
         throw new TRPCError({
@@ -69,6 +70,6 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      return data
+      return data;
     }),
 });

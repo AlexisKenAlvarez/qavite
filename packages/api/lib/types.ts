@@ -1,3 +1,4 @@
+
 export type Json =
   | string
   | number
@@ -36,6 +37,7 @@ export type Database = {
     Tables: {
       admins: {
         Row: {
+          auth_id: string
           created_at: string
           email: string
           first_name: string
@@ -43,6 +45,7 @@ export type Database = {
           last_name: string
         }
         Insert: {
+          auth_id?: string
           created_at?: string
           email: string
           first_name: string
@@ -50,6 +53,7 @@ export type Database = {
           last_name: string
         }
         Update: {
+          auth_id?: string
           created_at?: string
           email?: string
           first_name?: string
@@ -58,27 +62,92 @@ export type Database = {
         }
         Relationships: []
       }
+      chats: {
+        Row: {
+          count: number
+          created_at: string
+          id: number
+          prompt: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          id?: number
+          prompt: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          id?: number
+          prompt?: string
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          author: string
+          category: Database["public"]["Enums"]["ticket_categ_enum"] | null
+          created_at: string
+          id: number
+          message: string
+          specific: string
+          status: Database["public"]["Enums"]["ticket_status_enum"] | null
+        }
+        Insert: {
+          author?: string
+          category?: Database["public"]["Enums"]["ticket_categ_enum"] | null
+          created_at?: string
+          id?: number
+          message: string
+          specific: string
+          status?: Database["public"]["Enums"]["ticket_status_enum"] | null
+        }
+        Update: {
+          author?: string
+          category?: Database["public"]["Enums"]["ticket_categ_enum"] | null
+          created_at?: string
+          id?: number
+          message?: string
+          specific?: string
+          status?: Database["public"]["Enums"]["ticket_status_enum"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_tickets_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["auth_id"]
+          },
+        ]
+      }
       users: {
         Row: {
+          auth_id: string
           created_at: string
           email: string
           first_name: string
           id: number
           last_name: string
+          type: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Insert: {
+          auth_id?: string
           created_at?: string
           email: string
           first_name: string
           id?: number
           last_name: string
+          type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Update: {
+          auth_id?: string
           created_at?: string
           email?: string
           first_name?: string
           id?: number
           last_name?: string
+          type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Relationships: []
       }
@@ -87,10 +156,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment: {
+        Args: {
+          x: number
+          prompt_text: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      ticket_categ_enum:
+        | "Misunderstanding_User_Queries"
+        | "Limited_Vocabulary_and_Knowledge"
+        | "Difficulty_Handling_Ambiguity"
+        | "Ineffective_Problem_Resolution"
+        | "Unresponsiveness_or_Delays"
+        | "Inconsistent_User_Experience"
+        | "Privacy_and_Security_Concerns"
+      ticket_status_enum: "pending" | "accepted" | "rejected"
+      user_type_enum: "regular" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -208,6 +292,101 @@ export type Database = {
           },
         ]
       }
+      s3_multipart_uploads: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          id: string
+          in_progress_size: number
+          key: string
+          owner_id: string | null
+          upload_signature: string
+          version: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          id: string
+          in_progress_size?: number
+          key: string
+          owner_id?: string | null
+          upload_signature: string
+          version: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          id?: string
+          in_progress_size?: number
+          key?: string
+          owner_id?: string | null
+          upload_signature?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "s3_multipart_uploads_bucket_id_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      s3_multipart_uploads_parts: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          etag: string
+          id: string
+          key: string
+          owner_id: string | null
+          part_number: number
+          size: number
+          upload_id: string
+          version: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          etag: string
+          id?: string
+          key: string
+          owner_id?: string | null
+          part_number: number
+          size?: number
+          upload_id: string
+          version: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          etag?: string
+          id?: string
+          key?: string
+          owner_id?: string | null
+          part_number?: number
+          size?: number
+          upload_id?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey"
+            columns: ["upload_id"]
+            isOneToOne: false
+            referencedRelation: "s3_multipart_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -245,6 +424,37 @@ export type Database = {
         Returns: {
           size: number
           bucket_id: string
+        }[]
+      }
+      list_multipart_uploads_with_delimiter: {
+        Args: {
+          bucket_id: string
+          prefix_param: string
+          delimiter_param: string
+          max_keys?: number
+          next_key_token?: string
+          next_upload_token?: string
+        }
+        Returns: {
+          key: string
+          id: string
+          created_at: string
+        }[]
+      }
+      list_objects_with_delimiter: {
+        Args: {
+          bucket_id: string
+          prefix_param: string
+          delimiter_param: string
+          max_keys?: number
+          start_after?: string
+          next_token?: string
+        }
+        Returns: {
+          name: string
+          id: string
+          metadata: Json
+          updated_at: string
         }[]
       }
       search: {

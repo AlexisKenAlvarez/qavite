@@ -18,6 +18,7 @@ export default {
       colors: {
         green1: "#006400",
         primary: "#008400",
+        bg: "#F2F2F2"
       },
     },
   },

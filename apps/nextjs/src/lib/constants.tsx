@@ -1,7 +1,4 @@
-import Hero from "@/component/dashboard/Hero";
-import Reports from "@/component/dashboard/Reports";
-import { Home } from "lucide-react"
-import { Flag } from 'lucide-react';
+import { Flag, Home } from "lucide-react";
 
 export const navigations = [
   {
@@ -9,14 +6,12 @@ export const navigations = [
     icon: Home,
     link: "/dashboard",
     paths: ['/dashboard', '/'],
-    component: Hero
   },
   {
     label: "reports",
     icon: Flag,
     link: "/reports",
     paths: ['/reports'],
-    component: Reports
   },
   
 ]
