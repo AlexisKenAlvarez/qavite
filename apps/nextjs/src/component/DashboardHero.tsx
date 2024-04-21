@@ -1,16 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
 import { api } from "@/trpc/client";
+
+import type { RouterOutputs } from "@qavite/api";
+
+import { columns } from "./Columns";
+import { DataTable } from "./DataTable";
 
 const DashboardHero = ({
   userCount,
   totalReports,
   finishedReports,
+  userList,
 }: {
   userCount: number | null;
   totalReports: number | null;
   finishedReports: number | null;
+  userList: RouterOutputs["admin"]["getUsers"];
 }) => {
+  console.log("🚀 ~ userList:", userList);
   const { data: userQueryCount } = api.admin.countUser.useQuery(undefined, {
     initialData: userCount,
   });
@@ -32,6 +41,10 @@ const DashboardHero = ({
       initialData: finishedReports,
     },
   );
+
+  const { data: userListData } = api.admin.getUsers.useQuery(undefined, {
+    initialData: userList,
+  });
 
   const dashboardData = [
     {
@@ -145,20 +158,29 @@ const DashboardHero = ({
         Dashboard
       </h1>
 
-      <div className="mt-6 flex w-full gap-10">
+      <div className="mt-6 flex w-full flex-col gap-3 md:flex-row md:gap-10">
         {dashboardData.map((data, index) => (
           <div
             key={index}
-            className="w-full max-w-72 rounded-md p-4"
+            className="flex w-full flex-row items-center gap-2 rounded-md p-4 md:max-w-72 md:flex-col md:items-start"
             style={{ backgroundColor: data.color }}
           >
-            <h1 className="text-5xl font-bold text-white">{data.value}</h1>
-            <div className="flex items-end justify-between">
-              <p className="mt-10 text-white">{data.title}</p>
-              <div className="-mb-2">{data.icon}</div>
+            <h1 className="text-2xl font-bold text-white md:text-5xl">
+              {data.value}
+            </h1>
+            <div className="flex w-full items-end justify-between">
+              <p className="text-white md:mt-10">{data.title}</p>
+              <div className="-mb-2 hidden md:block">{data.icon}</div>
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-10 h-full w-full max-w-[59rem] space-y-4">
+        <h1 className="font-primary text-2xl font-bold text-primary">
+          User List
+        </h1>
+        <DataTable columns={columns} data={userListData ?? []} />
       </div>
     </div>
   );

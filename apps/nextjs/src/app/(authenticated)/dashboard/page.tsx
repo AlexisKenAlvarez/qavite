@@ -5,6 +5,8 @@ const page = async () => {
   const userCount = await api.admin.countUser();
   const totalReports = await api.admin.countReports({ type: "all" });
   const finishedReports = await api.admin.countReports({ type: "finished" });
+  const userList = await api.admin.getUsers()
+  // console.log("🚀 ~ page ~ userList:", userList)
 
   return (
     <div>
@@ -12,6 +14,7 @@ const page = async () => {
         userCount={userCount}
         totalReports={totalReports}
         finishedReports={finishedReports}
+        userList={userList}
       />
     </div>
   );

@@ -6,9 +6,9 @@ const page = async () => {
 
   const supabase = supabaseServer()
 
-  const { data } = await supabase.auth.getSession()
+  const { data } = await supabase.auth.getUser()
 
-  if (data.session) {
+  if (data.user) {
     redirect('/')
   }
 

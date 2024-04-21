@@ -5,7 +5,6 @@ import type { Viewport } from "next";
 import { DM_Serif_Display } from "next/font/google";
 
 import { cn } from "@qavite/ui";
-import { ThemeProvider } from "@qavite/ui/theme";
 import { Toaster } from "@qavite/ui/toast";
 
 import "@/app/globals.css";
@@ -57,10 +56,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           DMSerif.variable,
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCProvider>{props.children}</TRPCProvider>
-          <Toaster />
-        </ThemeProvider>
+        {/* <ThemeProvider attribute="class" defaultTheme="system" enableSystem> */}
+        <TRPCProvider>{props.children}</TRPCProvider>
+        <Toaster />
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );
