@@ -11,6 +11,9 @@ export const columns: ColumnDef<RouterOutputs["admin"]["getUsers"][0]>[] = [
   {
     accessorKey: "id",
     header: "User No.",
+    cell: ({ row }) => {
+      return <p>{row.index + 1}</p>;
+    },
   },
   {
     id: "fullname",

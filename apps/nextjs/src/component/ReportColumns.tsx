@@ -15,7 +15,7 @@ export const reportColumns: ColumnDef<
 >[] = [
   {
     accessorKey: "id",
-    header: "Report No.",
+    header: "Report Id.",
   },
   {
     accessorKey: "author.email",

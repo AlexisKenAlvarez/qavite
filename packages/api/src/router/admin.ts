@@ -44,7 +44,7 @@ export const adminRouter = createTRPCRouter({
         const { count, error } = await ctx.supabase
           .from("tickets")
           .select("*", { count: "exact" })
-          .neq("status", "open");
+          .eq("status", "closed");
 
         if (error) {
           throw new TRPCError({
@@ -116,7 +116,6 @@ export const adminRouter = createTRPCRouter({
           <p>Message: ${input.message} </p>
           `,
         });
-
       } catch (error) {
         console.log(error);
         throw new TRPCError({
@@ -144,6 +143,48 @@ export const adminRouter = createTRPCRouter({
       if (error) {
         throw new TRPCError({
           message: "Failed to close ticket",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      return true;
+    }),
+  getChats: protectedProcedure.query(async ({ ctx }) => {
+    const { data, error } = await ctx.supabase
+      .from("chats")
+      .select("*")
+      .order("count", { ascending: false })
+      .limit(15);
+
+    if (error) {
+      throw new TRPCError({
+        message: "Failed to get users",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    return data;
+  }),
+  setQuickChat: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        value: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log(input.value);
+      const { error } = await ctx.supabase
+        .from("chats")
+        .update({
+          quickchat: input.value,
+        })
+        .eq("id", input.id);
+
+      if (error) {
+        console.log("🚀 ~ .mutation ~ error:", error);
+        throw new TRPCError({
+          message: "Failed to set quick chat",
           code: "BAD_REQUEST",
         });
       }
