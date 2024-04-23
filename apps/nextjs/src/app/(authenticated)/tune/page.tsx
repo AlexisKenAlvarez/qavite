@@ -2,7 +2,7 @@ import TuneHero from "@/component/TuneHero";
 
 const page = () => {
   return (
-    <div>
+    <div className="h-full ">
       <TuneHero/>
     </div>
   );

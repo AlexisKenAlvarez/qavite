@@ -17,7 +17,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
     <Container className="flex min-h-screen items-stretch p-0 ">
       <Nav />
       <div className="w-full lg:p-5 min-h-screen flex">
-        <div className="bg-bg p-3 w-full lg:rounded-xl">{children}</div>
+        <div className="bg-bg p-3 w-full lg:rounded-xl flex-1">{children}</div>
       </div>
     </Container>
   );
