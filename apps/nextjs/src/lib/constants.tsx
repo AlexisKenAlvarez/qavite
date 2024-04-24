@@ -1,4 +1,4 @@
-import { Flag, Home, MessageSquare } from "lucide-react";
+import { Flag, Home, MessageSquare,Antenna } from "lucide-react";
 
 export const navigations = [
   {
@@ -19,4 +19,10 @@ export const navigations = [
     link: "/chats",
     paths: ["/chats"],
   },
+  {
+    label: "tune",
+    icon: Antenna,
+    link: "/tune",
+    paths: ["/tune"],
+  }
 ];
