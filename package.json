@@ -13,7 +13,9 @@
     "db:studio": "pnpm -F db studio",
     "gen": "pnpm --filter @qavite/api gen",
     "dev": "turbo dev --parallel",
+    "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
+    "typecheck": "turbo typecheck",
     "ui-add": "pnpm -F ui ui-add"
   },
   "devDependencies": {
