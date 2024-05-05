@@ -1,10 +1,80 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { TRPCError } from "@trpc/server";
 import nodemailer from "nodemailer";
+import OpenAI from "openai";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { cvsuData } from "../../lib/data";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+
+const openai = new OpenAI({
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+});
 
 export const adminRouter = createTRPCRouter({
+  searchAnswer: protectedProcedure
+    .input(
+      z.object({
+        prompt: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const user_input = input.prompt.replace(/\n/g, " ");
+
+        const embeddingResponse = await openai.embeddings.create({
+          model: "text-embedding-ada-002",
+          input: user_input,
+        });
+
+        const embedding = embeddingResponse.data[0]?.embedding;
+
+        const { data: documents } = await ctx.supabase.rpc("match_documents", {
+          query_embedding: JSON.stringify(embedding),
+          match_threshold: 0.78, // Choose an appropriate threshold for your data
+          match_count: 5, // Choose the number of matches
+        });
+
+        return documents;
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          message: "Failed to search for answer",
+          code: "BAD_REQUEST",
+        });
+      }
+    }),
+
+  genEmbed: publicProcedure.query(({ ctx }) => {
+    try {
+      cvsuData.forEach(async (data: string) => {
+        // OpenAI recommends replacing newlines with spaces for best results
+        const input = data.replace(/\n/g, " ");
+
+        const embeddingResponse = await openai.embeddings.create({
+          model: "text-embedding-ada-002",
+          input,
+        });
+
+        const embedding = embeddingResponse.data[0]?.embedding;
+
+        // In production we should handle possible errors
+        await ctx.supabase.from("cvsu_data").insert({
+          content: data,
+          embedding: JSON.stringify(embedding),
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      throw new TRPCError({
+        message: "Failed to generate embeddings",
+        code: "BAD_REQUEST",
+      });
+    }
+
+    return true;
+  }),
+
   countUser: protectedProcedure.query(async ({ ctx }) => {
     const { count, error } = await ctx.supabase
       .from("users")

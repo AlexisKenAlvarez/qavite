@@ -6,6 +6,8 @@ const page = async () => {
 
   const supabase = supabaseServer()
 
+  // await api.admin.genEmbed()
+
   const { data } = await supabase.auth.getUser()
 
   if (data.user) {

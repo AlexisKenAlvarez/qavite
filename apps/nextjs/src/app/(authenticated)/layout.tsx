@@ -4,8 +4,11 @@ import Container from "@/component/Container";
 import Nav from "@/component/Nav";
 import { supabaseServer } from "@/supabase/supabaseServer";
 
+
 const layout = async ({ children }: { children: ReactNode }) => {
   const supabase = supabaseServer();
+
+
 
   const { data } = await supabase.auth.getUser();
 
