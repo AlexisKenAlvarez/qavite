@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { TRPCError } from "@trpc/server";
+import GPT3Tokenizer from "gpt3-tokenizer";
 import nodemailer from "nodemailer";
+import oneline from "oneline";
 import OpenAI from "openai";
+import stripIndent from "strip-indent";
 import { z } from "zod";
 
 import { cvsuData } from "../../lib/data";
@@ -32,10 +36,59 @@ export const adminRouter = createTRPCRouter({
         const { data: documents } = await ctx.supabase.rpc("match_documents", {
           query_embedding: JSON.stringify(embedding),
           match_threshold: 0.78, // Choose an appropriate threshold for your data
-          match_count: 5, // Choose the number of matches
+          match_count: 10, // Choose the number of matches
         });
 
-        return documents;
+        const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
+        let tokenCount = 0;
+        let contextText = "";
+
+        // Concat matched documents
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (documents && documents.length > 0) {
+          for (let i = 0; i < documents.length; i++) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion
+            const document = documents[i]!;
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const content = document.content;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            const encoded = tokenizer.encode(content);
+            tokenCount += encoded.text.length;
+
+            // Limit context to max 1500 tokens (configurable)
+            if (tokenCount > 1500) {
+              break;
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+            contextText += `${content.trim()}\n---\n`;
+          }
+        }
+
+        const converted = oneline`You are QAVITE, a helpful assistant trained to response questions about locations within Cavite State University. You will only provide responses based on the dataset that was fine-tuned and not on pre-defined model. Please ensure that all responses are relevant to locations within Cavite State University and adhere to the information provided in the fine-tuned dataset. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help withtha "`;
+
+        const prompt = stripIndent(`${converted} 
+        
+        Context sections:
+        ${contextText}
+
+        Question: """
+        ${input.prompt}
+        """
+        `);
+
+        // In production we should handle possible errors
+        const completionResponse = await openai.completions.create({
+          model: "ft:gpt-3.5-turbo-0125:personal::9D5iwinm",
+          prompt,
+          max_tokens: 256,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+          temperature: 0.3, // Set to 0 for deterministic results
+        });
+
+        return completionResponse;
       } catch (error) {
         console.log(error);
         throw new TRPCError({

@@ -6,6 +6,7 @@ import { navigations } from "@/lib/constants";
 import { ChevronsRight, LogOut } from "lucide-react";
 
 import { cn } from "@qavite/ui";
+import { supabase } from "@/supabase/supabaseClient";
 
 const Nav = () => {
   const [opened, setOpened] = useState(false);
@@ -59,7 +60,7 @@ const Nav = () => {
           </ul>
         </div>
 
-        <button className="hover:bg-green1 flex w-full items-center gap-2 px-4 py-5 text-white transition-all duration-300 ease-in-out">
+        <button className="hover:bg-green1 flex w-full items-center gap-2 px-4 py-5 text-white transition-all duration-300 ease-in-out" onClick={async () => await supabase.auth.signOut()}>
           <LogOut />
           <p className="">Logout</p>
         </button>
