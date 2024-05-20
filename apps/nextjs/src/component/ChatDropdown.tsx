@@ -25,7 +25,7 @@ const ChatDropdown = ({
       onValueChange={async (data) => {
         await quickChatMutation.mutateAsync({
           id,
-          value: !!data,
+          value: data === "true" ? true : false,
         });
       }}
     >

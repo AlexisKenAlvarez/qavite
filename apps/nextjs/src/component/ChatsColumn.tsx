@@ -27,7 +27,8 @@ export const chatColumns: ColumnDef<
       const data = row.original;
       const id = data.id;
 
-      return <ChatDropdown id={id} isQuickChat={data.quickchat as boolean} />;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return <ChatDropdown id={id} isQuickChat={data.quickchat!} />;
     },
   },
 ];
