@@ -21,7 +21,7 @@ export const chatColumns: ColumnDef<
     header: "prompt",
   },
   {
-    accessorKey: "message",
+    accessorKey: "quickchat",
     header: "Quick Chat",
     cell: ({ row }) => {
       const data = row.original;
