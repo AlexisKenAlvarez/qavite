@@ -39,7 +39,13 @@ export function DataTable<TData, TValue>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="px-10 text-white">
+                  <TableHead
+                    style={{
+                      width: header.getSize(),
+                    }}
+                    key={header.id}
+                    className="px-10 text-white"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -63,7 +69,9 @@ export function DataTable<TData, TValue>({
                   <TableCell
                     key={cell.id}
                     className="px-10 py-3"
-                    style={{ width: `${cell.column.getSize()}px` }}
+                    style={{
+                      width: cell.column.getSize(),
+                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

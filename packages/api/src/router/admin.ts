@@ -57,7 +57,10 @@ export const adminRouter = createTRPCRouter({
       }
     }),
   getUsers: protectedProcedure.query(async ({ ctx }) => {
-    const { data, error } = await ctx.supabase.from("users").select("*");
+    const { data, error } = await ctx.supabase
+      .from("users")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw new TRPCError({
@@ -204,9 +207,7 @@ export const adminRouter = createTRPCRouter({
         .update({
           deactivated: input.value,
         })
-        .eq("auth_id", input.id)
-        .order("created_at", { ascending: false });
-        
+        .eq("auth_id", input.id);
 
       if (error) {
         throw new TRPCError({
@@ -216,5 +217,24 @@ export const adminRouter = createTRPCRouter({
       }
 
       return true;
+    }),
+  deleteUser: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { error } = await ctx.supabase
+        .from("users")
+        .delete()
+        .eq("auth_id", input.id);
+
+      if (error) {
+        throw new TRPCError({
+          message: "Failed to delete user",
+          code: "BAD_REQUEST",
+        });
+      }
     }),
 });
