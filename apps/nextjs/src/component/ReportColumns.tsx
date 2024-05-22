@@ -29,6 +29,13 @@ export const reportColumns: ColumnDef<
     },
   },
   {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => {
+      return <div className="min-w-[10rem]">{row.original.category?.replaceAll("_", " ")}</div>;
+    }
+  },
+  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
