@@ -191,4 +191,30 @@ export const adminRouter = createTRPCRouter({
 
       return true;
     }),
+  deactivate: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        value: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { error } = await ctx.supabase
+        .from("users")
+        .update({
+          deactivated: input.value,
+        })
+        .eq("auth_id", input.id)
+        .order("created_at", { ascending: false });
+        
+
+      if (error) {
+        throw new TRPCError({
+          message: "Failed to deactivate user",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      return true;
+    }),
 });

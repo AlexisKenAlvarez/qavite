@@ -6,12 +6,9 @@ import { navigations } from "@/lib/constants";
 import { ChevronsRight, LogOut } from "lucide-react";
 
 import { cn } from "@qavite/ui";
-import { supabase } from "@/supabase/supabaseClient";
-import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const [opened, setOpened] = useState(false);
-  const router = useRouter()
   return (
     <>
       <nav

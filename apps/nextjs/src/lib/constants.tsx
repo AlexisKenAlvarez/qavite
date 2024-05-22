@@ -1,4 +1,4 @@
-import { Flag, Home, MessageSquare } from "lucide-react";
+import { Flag, Home, MessageSquare, User } from "lucide-react";
 
 export const navigations = [
   {
@@ -6,6 +6,12 @@ export const navigations = [
     icon: Home,
     link: "/dashboard",
     paths: ["/dashboard", "/"],
+  },
+  {
+    label: "users",
+    icon: User,
+    link: "/users",
+    paths: ["/users"],
   },
   {
     label: "reports",
