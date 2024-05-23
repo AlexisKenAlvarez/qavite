@@ -230,6 +230,16 @@ export const adminRouter = createTRPCRouter({
         .delete()
         .eq("auth_id", input.id);
 
+      const { error: authErrorDelete } =
+        await ctx.supabase.auth.admin.deleteUser(input.id);
+
+      if (authErrorDelete) {
+        throw new TRPCError({
+          message: "Failed to delete user",
+          code: "BAD_REQUEST",
+        });
+      }
+
       if (error) {
         throw new TRPCError({
           message: "Failed to delete user",

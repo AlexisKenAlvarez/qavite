@@ -19,7 +19,7 @@ const UsersHero = ({
 
   return (
     <div>
-      <h1 className="font-primary text-3xl font-bold text-primary">Chats</h1>
+      <h1 className="font-primary text-3xl font-bold text-primary">Users</h1>
       <div className="mt-4">
         <DataTable data={userData ?? []} columns={userColumns} />
       </div>
