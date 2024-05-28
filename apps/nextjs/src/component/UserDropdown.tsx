@@ -33,8 +33,8 @@ const UserDropdown = ({
         <SelectValue placeholder={isDeactivated.toString().toUpperCase()} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="true">TRUE</SelectItem>
-        <SelectItem value="false">FALSE</SelectItem>
+        <SelectItem value="true">Deactivated</SelectItem>
+        <SelectItem value="false">Active</SelectItem>
       </SelectContent>
     </Select>
   );

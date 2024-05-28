@@ -33,16 +33,6 @@ export const userColumns: ColumnDef<RouterOutputs["admin"]["getUsers"]["0"]>[] =
       },
     },
     {
-      accessorKey: "delete",
-      header: "Delete User",
-      cell: ({ row }) => {
-        const data = row.original;
-        const id = data.auth_id;
-
-        return <UserDelete id={id} />;
-      },
-    },
-    {
       accessorKey: "deactivated",
       header: "Deactivated",
 
@@ -50,9 +40,17 @@ export const userColumns: ColumnDef<RouterOutputs["admin"]["getUsers"]["0"]>[] =
         const data = row.original;
         const id = data.auth_id;
 
-        return (
-          <UserDropdown id={id} isDeactivated={data.deactivated as boolean} />
-        );
+        return <UserDropdown id={id} isDeactivated={data.deactivated} />;
+      },
+    },
+    {
+      accessorKey: "delete",
+      header: "Delete User",
+      cell: ({ row }) => {
+        const data = row.original;
+        const id = data.auth_id;
+
+        return <UserDelete id={id} />;
       },
     },
   ];

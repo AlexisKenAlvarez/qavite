@@ -8,7 +8,8 @@ export const adminRouter = createTRPCRouter({
   countUser: protectedProcedure.query(async ({ ctx }) => {
     const { count, error } = await ctx.supabase
       .from("users")
-      .select("*", { count: "exact" });
+      .select("*", { count: "exact" })
+      .eq("verified", true);
 
     if (error) {
       throw new TRPCError({
@@ -60,7 +61,8 @@ export const adminRouter = createTRPCRouter({
     const { data, error } = await ctx.supabase
       .from("users")
       .select("*")
-      .order("created_at", { ascending: false });
+      .eq("verified", true)
+      .order("created_at", { ascending: false })
 
     if (error) {
       throw new TRPCError({

@@ -35,7 +35,7 @@ export const authRouter = createTRPCRouter({
 
       if (data.user) {
         await ctx.supabase.from("users").update({ verified: true }).eq("auth_id", auth_id);
-        await ctx.supabase.from("verificationTokens").delete().eq("token", token);
+        await ctx.supabase.from("verificationTokens").delete().eq("user", auth_id);
       }
 
       return data
