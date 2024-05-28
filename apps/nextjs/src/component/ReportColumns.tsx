@@ -22,18 +22,27 @@ export const reportColumns: ColumnDef<
     header: "Email Address",
   },
   {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => {
+      return (
+        <div className="min-w-[10rem]">
+          {row.original.category?.replaceAll("_", " ")}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "message",
     header: "Report",
     cell: ({ row }) => {
       return <div className="min-w-[10rem]">{row.original.message}</div>;
     },
   },
+
   {
-    accessorKey: "category",
-    header: "Category",
-    cell: ({ row }) => {
-      return <div className="min-w-[10rem]">{row.original.category?.replaceAll("_", " ")}</div>;
-    }
+    accessorKey: "specific",
+    header: "Recommendations",
   },
   {
     id: "actions",
