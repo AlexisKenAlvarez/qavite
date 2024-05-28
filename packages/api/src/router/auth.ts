@@ -7,6 +7,40 @@ export const authRouter = createTRPCRouter({
   isLoggedIn: publicProcedure.query(({ ctx }) => {
     return ctx.user ? true : false;
   }),
+  verifyUser: publicProcedure
+    .input(
+      z.object({
+        token: z.string(),
+        auth_id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const token = input.token;
+      const auth_id = input.auth_id;
+
+      const { data, error } = await ctx.supabase
+        .from("verificationTokens")
+        .select()
+        .eq("token", token)
+        .eq("user", auth_id)
+        .limit(1)
+        .single();
+
+      if (error) {
+        throw new TRPCError({
+          message: "Failed to verify your account.",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      if (data.user) {
+        await ctx.supabase.from("users").update({ verified: true }).eq("auth_id", auth_id);
+        await ctx.supabase.from("verificationTokens").delete().eq("token", token);
+      }
+
+      return data
+
+    }),
   createUser: publicProcedure
     .input(
       z.object({
