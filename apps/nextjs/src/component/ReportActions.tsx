@@ -129,7 +129,7 @@ const ReportActions = ({ email, id }: { email: string; id: number }) => {
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will reject the ticket that was
+              This action cannot be undone. This will close the ticket that was
               submitted.
             </DialogDescription>
           </DialogHeader>

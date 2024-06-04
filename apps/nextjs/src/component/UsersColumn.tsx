@@ -34,7 +34,7 @@ export const userColumns: ColumnDef<RouterOutputs["admin"]["getUsers"]["0"]>[] =
     },
     {
       accessorKey: "deactivated",
-      header: "Deactivated",
+      header: "Account status",
 
       cell: ({ row }) => {
         const data = row.original;
