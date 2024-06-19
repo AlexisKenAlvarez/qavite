@@ -156,7 +156,7 @@ export const adminRouter = createTRPCRouter({
     }),
   getChats: protectedProcedure.query(async ({ ctx }) => {
     const { data, error } = await ctx.supabase
-      .from("chats")
+      .from("questions")
       .select("*")
       .order("count", { ascending: false })
       .limit(15);
