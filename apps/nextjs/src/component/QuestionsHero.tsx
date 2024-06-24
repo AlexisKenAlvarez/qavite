@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client";
 
-import { useEffect } from "react";
 import { api } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
@@ -20,7 +20,6 @@ import {
 } from "@qavite/ui/form";
 import { Input } from "@qavite/ui/input";
 
-import QuestionDropdown from "./QuestionDropdown";
 
 const QuestionsHero = () => {
   const { data: questionData, fetchNextPage } =
@@ -126,7 +125,7 @@ const QuestionsHero = () => {
         <div className="flex w-full justify-between rounded-md bg-primary/80 p-3 px-5 text-white">
           <h1 className="w-full">Prompt</h1>
           <h1 className="w-24 text-center">Count</h1>
-          <h1 className="w-24 text-center">Action</h1>
+          {/* <h1 className="w-24 text-center">Action</h1> */}
         </div>
         <div className="divide-y">
           {questionData?.pages.map((page, i) =>
@@ -144,9 +143,9 @@ const QuestionsHero = () => {
               >
                 <h1 className="w-full">{question.prompt}</h1>
                 <h1 className="w-24 text-center">{question.count}</h1>
-                <div className="flex w-24 justify-center text-center">
+                {/* <div className="flex w-24 justify-center text-center">
                   <QuestionDropdown id={question.id} prompt={question.prompt} />
-                </div>
+                </div> */}
               </div>
             )),
           )}
