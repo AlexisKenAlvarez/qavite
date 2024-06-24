@@ -5,8 +5,6 @@ import { useEffect } from "react";
 import { api } from "@/trpc/client";
 import { useInView } from "react-intersection-observer";
 
-import ChatsDropdown from "./ChatsDropdown";
-
 const ChatsHero = () => {
   const { data: chatsData, fetchNextPage } =
     api.admin.getChats.useInfiniteQuery(
