@@ -45,7 +45,7 @@ const ChatsHero = () => {
         <div className="flex w-full justify-between rounded-md bg-primary/80 p-3 px-5 text-white">
           <h1 className="w-full">Prompt</h1>
           <h1 className="w-24 text-center">Count</h1>
-          <h1 className="w-24 text-center">Action</h1>
+          {/* <h1 className="w-24 text-center">Action</h1> */}
         </div>
         <div className="divide-y">
           {chatsData?.pages.map((page, i) =>
@@ -63,9 +63,9 @@ const ChatsHero = () => {
               >
                 <h1 className="w-full">{chat.prompt}</h1>
                 <h1 className="w-24 text-center">{chat.count}</h1>
-                <div className="flex w-24 justify-center text-center">
+                {/* <div className="flex w-24 justify-center text-center">
                   <ChatsDropdown id={chat.id} />
-                </div>
+                </div> */}
               </div>
             )),
           )}
