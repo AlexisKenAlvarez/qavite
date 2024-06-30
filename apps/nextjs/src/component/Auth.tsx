@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { validateEmailDomain } from "@/lib/helpers";
 import { api } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -46,12 +45,6 @@ const Auth = () => {
   });
 
   async function onSubmit(data: formType) {
-    if (!validateEmailDomain(data.email)) {
-      form.setError("email", {
-        message: "Invalid email domain",
-      });
-      return;
-    }
 
     try {
       await signinMutation.mutateAsync(data);
